@@ -45,4 +45,35 @@ config RTC_QMSI_API_REENTRANCY
 	help
 	  Enable support for RTC shim driver API reentrancy.
 
+config RTC_STM32
+	bool
+	prompt "STM32 MCU RTC driver"
+	depends on RTC && SOC_FAMILY_STM32
+	depends on SOC_SERIES_STM32L4X || SOC_SERIES_STM32F4X || SOC_SERIES_STM32F3X
+	default n
+	help
+	Enable RTC support on the STM32 family of processors.
+
+config RTC_STM32_API_REENTRANCY
+	bool
+	prompt "STM32 MCU RTC driver API reentrancy"
+	depends on RTC_STM32
+	default n
+	help
+	Enable support for RTC driver API reentrancy.
+
+config RTC_STM32_INTERRUPT
+	bool
+	prompt "STM32 MCU RTC Interrupt Support"
+	depends on RTC_STM32
+	default n
+	help
+	Enable interrupt support for the RTC driver of STM32 family.
+
+config RTC_STM32_IRQ_PRIORITY
+	int "STM32 MCU RTC driver interrupt priority"
+	depends on RTC_STM32_INTERRUPT
+	help
+	RTC interrupt priority for the RTC driver of STM32 family.
+
 endif # RTC
