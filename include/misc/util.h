@@ -15,8 +15,14 @@
 #define _UTIL__H_
 
 #ifdef __cplusplus
-extern "C" {
+#define C_INTERFACE_BEGIN extern "C" {
+#define C_INTERFACE_END }
+#else
+#define C_INTERFACE_BEGIN
+#define C_INTERFACE_END
 #endif
+
+C_INTERFACE_BEGIN
 
 #ifndef _ASMLANGUAGE
 
@@ -302,8 +308,6 @@ static inline s64_t arithmetic_shift_right(s64_t value, u8_t shift)
  */
 #define UTIL_LISTIFY(LEN, F, F_ARG) UTIL_EVAL(UTIL_REPEAT(LEN, F, F_ARG))
 
-#ifdef __cplusplus
-}
-#endif
+C_INTERFACE_END
 
 #endif /* _UTIL__H_ */
