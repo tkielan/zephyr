@@ -50,9 +50,11 @@ C_INTERFACE_BEGIN
 /* Evaluates to number of elements in an array; compile error if not
  * an array (e.g. pointer)
  */
+#ifndef __cplusplus
 #define ARRAY_SIZE(array) \
 	((unsigned long) (IS_ARRAY(array) + \
 		(sizeof(array) / sizeof((array)[0]))))
+#endif
 
 /* Evaluates to 1 if ptr is part of array, 0 otherwise; compile error if
  * "array" argument is not an array (e.g. "ptr" and "array" mixed up)
@@ -309,5 +311,16 @@ static inline s64_t arithmetic_shift_right(s64_t value, u8_t shift)
 #define UTIL_LISTIFY(LEN, F, F_ARG) UTIL_EVAL(UTIL_REPEAT(LEN, F, F_ARG))
 
 C_INTERFACE_END
+
+#ifdef __cplusplus
+/* Evaluates to number of elements in an array; compile error if not
+ * an array (e.g. pointer)
+ */
+template <typename T, unsigned long N>
+constexpr unsigned long ARRAY_SIZE(T (&)[N])
+{
+	return N;
+}
+#endif
 
 #endif /* _UTIL__H_ */
