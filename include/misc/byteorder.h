@@ -289,14 +289,17 @@ static inline u64_t sys_get_le64(const u8_t src[8])
  */
 static inline void sys_memcpy_swap(void *dst, const void *src, size_t length)
 {
-	__ASSERT(((src < dst && (src + length) <= dst) ||
-		  (src > dst && (dst + length) <= src)),
+	const u8_t *src_ptr = (const u8_t *)src;
+	u8_t *dst_ptr = (u8_t *)dst;
+
+	__ASSERT(((src_ptr < dst_ptr && (src_ptr + length) <= dst_ptr) ||
+		  (src_ptr > dst_ptr && (dst_ptr + length) <= src_ptr)),
 		 "Source and destination buffers must not overlap");
 
-	src += length - 1;
+	src_ptr += length - 1;
 
 	for (; length > 0; length--) {
-		*((u8_t *)dst++) = *((u8_t *)src--);
+		*(dst_ptr++) = *(src_ptr--);
 	}
 }
 
