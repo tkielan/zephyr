@@ -563,6 +563,7 @@ ssize_t bt_gatt_attr_write_ccc(struct bt_conn *conn,
 	.write = bt_gatt_attr_write_ccc,				\
 	.user_data = (&(struct _bt_gatt_ccc) { .cfg = _cfg,		\
 					       .cfg_len = ARRAY_SIZE(_cfg), \
+					       .value = 0, \
 					       .cfg_changed = _cfg_changed, }),\
 }
 
