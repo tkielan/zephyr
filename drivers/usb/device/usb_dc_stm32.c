@@ -50,6 +50,12 @@
 #include <clock_control/stm32_clock_control.h>
 #include <misc/util.h>
 
+#if defined(CONFIG_SOC_SERIES_STM32F4X)
+#define STM32_OTG_FS_IRQ STM32F4_IRQ_OTG_FS
+#elif defined(CONFIG_SOC_SERIES_STM32L4X)
+#define STM32_OTG_FS_IRQ STM32L4_IRQ_OTG_FS
+#endif
+
 #define SYS_LOG_LEVEL CONFIG_SYS_LOG_USB_DRIVER_LEVEL
 #include <logging/sys_log.h>
 
@@ -185,9 +191,9 @@ static int usb_dc_stm32_init(void)
 			   1);
 	}
 
-	IRQ_CONNECT(STM32F4_IRQ_OTG_FS, CONFIG_USB_DC_STM32_IRQ_PRI,
+	IRQ_CONNECT(STM32_OTG_FS_IRQ, CONFIG_USB_DC_STM32_IRQ_PRI,
 		    usb_dc_stm32_isr, 0, 0);
-	irq_enable(STM32F4_IRQ_OTG_FS);
+	irq_enable(STM32_OTG_FS_IRQ);
 
 	return 0;
 }
@@ -279,7 +285,7 @@ static int usb_dc_ep_transfer(const u8_t ep, u8_t *buf, size_t dlen, bool is_in,
 	ep_state->transfer_cb = cb;
 
 	if (!k_is_in_isr()) {
-		irq_disable(STM32F4_IRQ_OTG_FS);
+		irq_disable(STM32_OTG_FS_IRQ);
 	}
 
 	/* Configure and start transfer */
@@ -298,7 +304,7 @@ static int usb_dc_ep_transfer(const u8_t ep, u8_t *buf, size_t dlen, bool is_in,
 	}
 
 	if (!k_is_in_isr()) {
-		irq_enable(STM32F4_IRQ_OTG_FS);
+		irq_enable(STM32_OTG_FS_IRQ);
 	}
 
 	if (ep_state->transfer_cb || ret) { /* asynchronous transfer or error */
