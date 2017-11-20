@@ -4389,26 +4389,25 @@ extern void _arch_start_cpu(int cpu_num, k_thread_stack_t *stack, int sz,
  */
 inline void operator delete(void *ptr)
 {
-	(void)ptr;
+	k_free(ptr);
 }
 
 inline void operator delete[](void *ptr)
 {
-	(void)ptr;
+	k_free(ptr);
 }
 
 inline void *operator new(size_t size)
 {
-	(void)size;
-	return NULL;
+	return k_malloc(size);
 }
 
 inline void *operator new[](size_t size)
 {
-	(void)size;
-	return NULL;
+	return k_malloc(size);
 }
 
+#if 0
 /* Placement versions of operator new and delete */
 inline void operator delete(void *ptr1, void *ptr2)
 {
@@ -4433,6 +4432,7 @@ inline void *operator new[](size_t size, void *ptr)
 	(void)size;
 	return ptr;
 }
+#endif
 
 #endif /* defined(CONFIG_CPLUSPLUS) && defined(__cplusplus) */
 
