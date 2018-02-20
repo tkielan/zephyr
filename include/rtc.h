@@ -82,7 +82,7 @@ __syscall u32_t rtc_read(struct device *dev);
 
 static inline u32_t _impl_rtc_read(struct device *dev)
 {
-	const struct rtc_driver_api *api = dev->driver_api;
+	const struct rtc_driver_api *api = (const struct rtc_driver_api *)dev->driver_api;
 
 	return api->read(dev);
 }
@@ -91,7 +91,7 @@ __syscall void rtc_enable(struct device *dev);
 
 static inline void _impl_rtc_enable(struct device *dev)
 {
-	const struct rtc_driver_api *api = dev->driver_api;
+	const struct rtc_driver_api *api = (const struct rtc_driver_api *)dev->driver_api;
 
 	api->enable(dev);
 }
@@ -100,7 +100,7 @@ __syscall void rtc_disable(struct device *dev);
 
 static inline void _impl_rtc_disable(struct device *dev)
 {
-	const struct rtc_driver_api *api = dev->driver_api;
+	const struct rtc_driver_api *api = (const struct rtc_driver_api *)dev->driver_api;
 
 	api->disable(dev);
 }
@@ -108,7 +108,7 @@ static inline void _impl_rtc_disable(struct device *dev)
 static inline int rtc_set_config(struct device *dev,
 				 struct rtc_config *cfg)
 {
-	const struct rtc_driver_api *api = dev->driver_api;
+	const struct rtc_driver_api *api = (const struct rtc_driver_api *)dev->driver_api;
 
 	return api->set_config(dev, cfg);
 }
@@ -118,7 +118,7 @@ __syscall int rtc_set_alarm(struct device *dev, const u32_t alarm_val);
 static inline int _impl_rtc_set_alarm(struct device *dev,
 				      const u32_t alarm_val)
 {
-	const struct rtc_driver_api *api = dev->driver_api;
+	const struct rtc_driver_api *api = (const struct rtc_driver_api *)dev->driver_api;
 
 	return api->set_alarm(dev, alarm_val);
 }
@@ -140,9 +140,8 @@ __syscall int rtc_get_pending_int(struct device *dev);
 
 static inline int _impl_rtc_get_pending_int(struct device *dev)
 {
-	struct rtc_driver_api *api;
+	struct rtc_driver_api *api = (struct rtc_driver_api *)dev->driver_api;
 
-	api = (struct rtc_driver_api *)dev->driver_api;
 	return api->get_pending_int(dev);
 }
 
